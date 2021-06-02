@@ -1,22 +1,21 @@
 import React from 'react'
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row ,Col} from 'react-bootstrap';
 import Video from '../../components/video/Video'
-import categoriesBar from '../../components/categoriesBar/CategoriesBar'
+import CategoriesBar from '../../components/categoriesBar/CategoriesBar';
 
 
 const HomeScreen = () => {
     return (
         <Container>
-            <categoriesBar />
-
+            <CategoriesBar />
             <Row>
-                {[...new Array(20)].map(() => (
-                    <col Lg={3} md={4}>
-                        <Video />
-                    </col>
-                ))}
+                {
+                    [...new Array(20)].map(()=>(
+                    <Col lg={3} md={4}>
+                    <Video />
+                    </Col>))
+                }
             </Row>
-
         </Container>
     )
 }
