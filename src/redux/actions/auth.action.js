@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 
 import auth  from '../../firebase';
-import { LOAD_PROFILE, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS } from '../reducers/actionType';
+import { LOAD_PROFILE, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOG_OUT } from '../reducers/actionType';
 
 
 export const login = () => async dispatch => {
@@ -14,7 +14,7 @@ export const login = () => async dispatch => {
         const provider = new firebase.auth.GoogleAuthProvider();
 
         const res = await auth.signInWithPopup(provider);
-        console.log(res);
+        
 
         const accessToken = res.credential.accessToken
 
@@ -22,6 +22,10 @@ export const login = () => async dispatch => {
             name: res.additionalUserInfo.profile.name,
             photoURL: res.additionalUserInfo.profile.picture,
         }
+
+        sessionStorage.setItem("ytc-access-token", accessToken);
+        sessionStorage.setItem("ytc-user",JSON.stringify(profile));
+
 
         dispatch({
             type: LOGIN_SUCCESS,
@@ -42,4 +46,20 @@ export const login = () => async dispatch => {
         })
         
     }
+}
+
+
+export const log_out = () => async dispatch =>{
+
+    await auth.signOut();
+
+    dispatch({
+        type: LOG_OUT,
+    })
+
+    sessionStorage.removeItem("ytc-access-token");
+    sessionStorage.removeItem("ytc-user");
+
+
+
 }
