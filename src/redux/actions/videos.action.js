@@ -1,4 +1,4 @@
-import { HOME_VIDEOS_REQUEST } from "../reducers/actionType";
+import { HOME_VIDEOS_FAIL, HOME_VIDEOS_REQUEST, HOME_VIDEOS_SUCCESS } from "../reducers/actionType";
 
 import request from '../../api';
 
@@ -10,7 +10,7 @@ export const getPopularVideos =()=>  async dispatch =>{
         dispatch({
             type: HOME_VIDEOS_REQUEST,
         })
-        const res = await request("/videos",{
+        const {data} = await request("/videos",{
             params:{
                 part : "snippet, contentDetails, statistics",
                 chart: "mostPopular",
@@ -20,9 +20,22 @@ export const getPopularVideos =()=>  async dispatch =>{
             },
         })
 
-        console.log(res);
+        dispatch({
+            type: HOME_VIDEOS_SUCCESS,
+            payload: {
+                videos: data.items,
+                nextPageToken: data.nextPageToken,
+            },
 
+        })
+
+       
     } catch (error) {
+        console.log(error.message);
+        dispatch({
+            type: HOME_VIDEOS_FAIL,
+            payload: error.message,
+        })
 
         
     }
